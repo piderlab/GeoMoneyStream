@@ -14,7 +14,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
   return (
     <div class="w-1/2 bg-gray-100 overflow-y-scroll shadow-inner">
       <div class={childClass}>
-        <h2 class="text-2xl p-1">1. Connect Wallet</h2>
+        <h2 class="text-2xl p-1">1. Connect wallet</h2>
         <button
           class="m-4 p-1 rounded shadow text-white bg-[#16A34A]"
           onClick={() => setIsWalletConnected(true)}
@@ -23,7 +23,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
         </button>
       </div>
       <div class={childClass}>
-        <h2 class="text-2xl p-1">2. Start Payment</h2>
+        <h2 class="text-2xl p-1">2. Money streaming</h2>
         <div class="flex items-center justify-center p-1">
           <div
             class={`text-center text-sm bg-blue-300 text-white ${flexChildClass}`}
