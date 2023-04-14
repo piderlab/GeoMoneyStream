@@ -19,7 +19,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
           class="m-4 p-1 rounded shadow text-white bg-[#16A34A]"
           onClick={() => setIsWalletConnected(true)}
         >
-          Connect Wallet
+          Connect wallet
         </button>
       </div>
       <div class={childClass}>
@@ -39,7 +39,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
             {flow.in}
           </div>
           <div class={`w-[12em] p-2 bg-[#BEF264] ${flexChildClass}`}>
-            <h3 class="font-bold">Your Wallet</h3>
+            <h3 class="font-bold">Your wallet</h3>
             <div>
               {Math.round(props.distanceToParking)}m to goal
             </div>
