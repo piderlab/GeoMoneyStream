@@ -58,6 +58,9 @@ const 虎ノ門ヒルズ: [number, number] = [35.6671145, 139.7499026];
 // const 六本木ヒルズLon = 139.7301143;
 const 渋谷: [number, number] = [35.6579364, 139.7017251];
 
+const pointA: [number, number] = [35.68, 139.72]; //hh
+const pointB: [number, number] = [35.64, 139.74]; //hh
+
 interface MapProps {
   setDistanceToParking: StateUpdater<number>;
   // distanceToParking: Signal<number>;
@@ -77,6 +80,8 @@ export default function Map(props: MapProps) {
     // アイコン追加
     L.marker(虎ノ門ヒルズ).addTo(map);
     L.marker(渋谷).addTo(map);
+    L.marker(pointA).addTo(map); //hh
+    L.marker(pointB).addTo(map); //hh
 
     // 円
     L.circle(虎ノ門ヒルズ, {
