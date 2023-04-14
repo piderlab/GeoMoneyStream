@@ -105,10 +105,10 @@ export default function Map(props: MapProps) {
       fillOpacity: 0.5,
       weight: 0,
     }).addTo(map);
-    L.polyline([虎ノ門ヒルズ, 渋谷], {
-      color: "#000000",
-      weight: 3,
-    }).addTo(map);
+    //L.polyline([虎ノ門ヒルズ, 渋谷], {
+    //  color: "#000000",
+    //  weight: 3,
+    //}).addTo(map);
 
     // 車のアイコン
     const 渋谷Marker = L.Marker.movingMarker([渋谷, 虎ノ門ヒルズ], [20000], {
