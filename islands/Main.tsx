@@ -9,7 +9,7 @@ import MoneyRouter from "../islands/MoneyRouter.tsx";
 // 2. 車スタート      walletAddress=...., flowRate={in: ..., out: ...}
 //  ↓ 10秒経過
 // 3. incomingエリアやoutcomingエリアに出たり入ったりする
-//
+//  ↓ ゴール到着
 // 4. 終了            walletAddress=...., flowRate={in: 0, out: 0}
 
 const walletAddress = signal<string | null>(null);

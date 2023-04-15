@@ -33,25 +33,55 @@ if (IS_BROWSER) {
   });
 
   // init stylesheet
-  const styleUrl = `${leafletUrl}dist/leaflet.css`;
   const leafletStyleElement = document.createElement("link");
   leafletStyleElement.type = "text/css";
   leafletStyleElement.rel = "stylesheet";
-  leafletStyleElement.href = styleUrl;
+  leafletStyleElement.href = `${leafletUrl}dist/leaflet.css`;
   document.head.append(leafletStyleElement);
 }
 
+// マーカー設置地点一覧
 const points = {
   地図中心: [35.664883, 139.725265],
   虎ノ門ヒルズ: [35.6671145, 139.7499026],
   渋谷: [35.6579364, 139.7017251],
-  pointA: [35.68, 139.72], //hh
-  pointB: [35.64, 139.74], //hh
+  信濃町: [35.68, 139.72], //hh
+  泉岳寺: [35.64, 139.74], //hh
 } satisfies Record<string, [number, number]>;
+
+// 車のスタート/ゴール地点
 const スタート地点 = points.渋谷;
 const ゴール地点 = points.虎ノ門ヒルズ;
 
+// 支払いエリア設定
+/** デフォルト（ベース）の支払額 */
 const defaultFlowRate = { in: 0, out: 40 };
+
+const areas: Area[] = [
+  {
+    // 中心座標
+    center: points.虎ノ門ヒルズ,
+    flowRateList: [{
+      // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
+      radius: 2000,
+      flowRate: { in: 10, out: 0 },
+      color: "blue",
+      fillColor: "#93C5FD",
+    }, {
+      // 半径1000m以内の時は、defaultFlowRateの値に加えて20トークンのincoming
+      radius: 1000,
+      flowRate: { in: 20, out: 0 },
+      color: "green",
+      fillColor: "#A7F3D0",
+    }, {
+      // 半径500m以内の時は、defaultFlowRateの値に加えて30トークンのincoming
+      radius: 500,
+      flowRate: { in: 30, out: 0 },
+      color: "red",
+      fillColor: "#FCA5A5",
+    }],
+  },
+];
 
 interface Area {
   center: [number, number];
@@ -62,30 +92,6 @@ interface Area {
     fillColor: string;
   }[];
 }
-
-const areas: Area[] = [
-  {
-    // 中心座標
-    center: points.虎ノ門ヒルズ,
-    flowRateList: [{
-      // 半径2000m以内の時は、追加で10トークンのincoming
-      radius: 2000,
-      flowRate: { in: 10, out: 0 },
-      color: "blue",
-      fillColor: "#93C5FD",
-    }, {
-      radius: 1000,
-      flowRate: { in: 20, out: 0 },
-      color: "green",
-      fillColor: "#A7F3D0",
-    }, {
-      radius: 500,
-      flowRate: { in: 30, out: 0 },
-      color: "red",
-      fillColor: "#FCA5A5",
-    }],
-  },
-];
 
 interface MapProps {
   flowRate: Signal<{ in: number; out: number }>;
@@ -105,10 +111,9 @@ export default function Map(props: MapProps) {
     L.control.scale().addTo(map);
 
     // アイコン追加
-    L.marker(points.虎ノ門ヒルズ, { icon: blueIcon }).addTo(map);
-    L.marker(points.渋谷, { icon: blueIcon }).addTo(map);
-    L.marker(points.pointA, { icon: blueIcon }).addTo(map); //hh
-    L.marker(points.pointB, { icon: blueIcon }).addTo(map); //hh
+    for (const point of Object.values(points)) {
+      L.marker(point, { icon: blueIcon }).addTo(map);
+    }
 
     // 円を追加
     for (const area of areas) {
