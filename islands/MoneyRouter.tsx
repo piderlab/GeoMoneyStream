@@ -17,6 +17,7 @@ interface MoneyRouterProps {
   distanceToParking: Signal<number>;
   walletAddress: Signal<string | null>;
   token: Signal<SuperToken | null>;
+  transactionWaiter: Signal<number>;
 }
 
 export default function MoneyRouter(props: MoneyRouterProps) {
@@ -119,6 +120,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
               &nbsp;<CurrentBalance
                 flowRate={flowRate.out - flowRate.in}
                 initialBalance={initialBalance}
+                transactionWaiter={props.transactionWaiter}
               />
             </div>
             <div>

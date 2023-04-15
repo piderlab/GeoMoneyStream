@@ -17,21 +17,27 @@ import MoneyRouter from "../islands/MoneyRouter.tsx";
 //  ↓ ゴール到着
 // 4. 終了            walletAddress=...., flowRate={in: 0, out: 0}
 
-const USE_METAMASK = false;
+const USE_METAMASK = true;
 
 const walletAddress = signal<string | null>(null);
 const distanceToParking = signal<number>(0);
 const flowRate = signal<{ in: number; out: number }>({ in: 0, out: 0 });
 const token = signal<SuperToken | null>(null);
+// トランザクション待ちの数。参照カウント方式。
 const transactionWaiter = signal<number>(0);
 
 const flowRateValue = computed(() => flowRate.value.out - flowRate.value.in);
 
 const SYSTEM_ACCOUNT = "0xF547dB53bFA9FF57EB469Ac82cD770E1BB991EA1";
 if (IS_BROWSER && USE_METAMASK) {
-  let hasFlow = false;
-  flowRateValue.subscribe((newFlowRate) => {
-    console.log("flowRate update");
+  // let hasFlow = false;
+  let preFlowRate: number | undefined = undefined;
+  flowRateValue.subscribe(async (newFlowRate) => {
+    if (newFlowRate === preFlowRate) {
+      return;
+    }
+    preFlowRate = newFlowRate;
+    // console.log("flowRate update", { hasFlow });
     if (!window.ethereum) {
       alert("please get Metamask");
       return;
@@ -49,46 +55,59 @@ if (IS_BROWSER && USE_METAMASK) {
 
     const signer = provider.getSigner();
 
+    const currentFlow = await token.value.getFlow({
+      sender: walletAddress.value,
+      receiver: SYSTEM_ACCOUNT,
+      providerOrSigner: provider,
+    });
+    const hasFlow = Number(currentFlow.flowRate) !== 0;
+
     if (newFlowRate === 0) {
       if (hasFlow) {
+        console.log("delete");
         const updateFlowOperation = token.value.deleteFlow({
-          sender: walletAddress.value!,
+          sender: walletAddress.value,
           receiver: SYSTEM_ACCOUNT,
         });
         transactionWaiter.value++;
         updateFlowOperation.exec(signer)
           .then((result) => {
-            transactionWaiter.value--;
             console.log(result);
+          }).finally(() => {
+            transactionWaiter.value--;
           });
-        hasFlow = false;
+        // hasFlow = false;
       }
     } else {
       if (hasFlow) {
+        console.log("update");
         const updateFlowOperation = token.value.updateFlow({
-          sender: walletAddress.value!,
+          sender: walletAddress.value,
           receiver: SYSTEM_ACCOUNT,
           flowRate: `${newFlowRate}`,
         });
         transactionWaiter.value++;
         updateFlowOperation.exec(signer)
           .then((result) => {
-            transactionWaiter.value++;
             console.log(result);
+          }).finally(() => {
+            transactionWaiter.value--;
           });
       } else {
+        console.log("create");
         const updateFlowOperation = token.value.createFlow({
-          sender: walletAddress.value!,
+          sender: walletAddress.value,
           receiver: SYSTEM_ACCOUNT,
           flowRate: `${newFlowRate}`,
         });
         transactionWaiter.value++;
         updateFlowOperation.exec(signer)
           .then((result) => {
-            transactionWaiter.value--;
             console.log(result);
+          }).finally(() => {
+            transactionWaiter.value--;
           });
-        hasFlow = true;
+        // hasFlow = true;
       }
     }
   });
@@ -109,6 +128,7 @@ export default function Main() {
         distanceToParking={distanceToParking}
         walletAddress={walletAddress}
         token={token}
+        transactionWaiter={transactionWaiter}
       />
     </div>
   );

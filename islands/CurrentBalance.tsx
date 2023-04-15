@@ -5,6 +5,7 @@ import { formatWei } from "../utils/eth.ts";
 
 interface CurrentBalanceProps {
   initialBalance: Signal<number>;
+  transactionWaiter: Signal<number>;
   /**wei/秒*/
   flowRate: number;
 }
@@ -29,6 +30,9 @@ export default function CurrentBalance(props: CurrentBalanceProps) {
       while (shouldContinue) {
         const time = await requestAnimationFramePromise();
         if (props.flowRate === 0) {
+          continue;
+        }
+        if (props.transactionWaiter.value !== 0) {
           continue;
         }
         const pastTime = Math.max(0, time - preTime) / 1000;

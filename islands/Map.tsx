@@ -160,9 +160,9 @@ export default function Map(props: MapProps) {
       }
       console.log({ newValue });
       if (newValue !== 0) {
-        carMarker.pause();
+        carMarker.stop();
       } else {
-        carMarker.resume();
+        carMarker.moveTo(ゴール地点, 20000);
       }
     });
   }, []);
