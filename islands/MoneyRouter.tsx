@@ -35,7 +35,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
             System
           </div>
           <div
-            class={`text-center w-12 ${
+            class={`text-center w-14 ${
               flowRate.in ? "text-[#84CC16]" : "text-gray-400"
             } ${flexChildClass}`}
           >
@@ -53,7 +53,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
             <h3 class="font-bold text-center text-sm pt-2">Your wallet</h3>
           </div>
           <div
-            class={`text-center w-12 ${
+            class={`text-center w-14 ${
               flowRate.out ? "text-red-400" : "text-gray-400"
             } ${flexChildClass}`}
           >
