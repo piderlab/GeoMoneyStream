@@ -81,7 +81,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
   const childClass = "px-1 mx-4 my-8 bg-white rounded shadow";
   const flexChildClass = "p-1 rounded";
   return (
-    <div class="w-1/2 bg-gray-100 overflow-y-scroll shadow-inner">
+    <div class="w-[600px] flex-grow flex-shrink-0 bg-gray-100 overflow-y-scroll shadow-inner">
       <div class={childClass}>
         <h2 class="text-2xl p-1">1. Connect wallet</h2>
         First you need to connect a wallet such as Metamask.<br />
@@ -91,7 +91,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
         >
           Connect wallet
         </button>
-        <span>{props.walletAddress.value}</span>
+        <span class="border p-1 text-sm">{props.walletAddress.value}</span>
       </div>
       <div class={childClass}>
         <h2 class="text-2xl p-1">2. Money streaming</h2>
@@ -103,7 +103,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
             System
           </div>
           <div
-            class={`text-center w-14 ${
+            class={`text-center w-16 transition-colors duration-500 ${
               flowRate.in ? "text-[#84CC16]" : "text-gray-400"
             } ${flexChildClass}`}
           >
@@ -112,20 +112,29 @@ export default function MoneyRouter(props: MoneyRouterProps) {
             <div>{flowRateIn}</div>
           </div>
           <div
-            class={`w-[20em] p-2 bg-gradient-to-rb from-green-600 to-indigo-800 text-sm text-white ${flexChildClass}`}
+            class={`w-[18em] p-2 flex-shrink-0 bg-gradient-to-rb from-green-600 to-indigo-800 text-sm text-white ${flexChildClass}`}
           >
-            balance:<br />
-            <CurrentBalance
-              flowRate={flowRate.out - flowRate.in}
-              initialBalance={initialBalance}
-            />
-            <div>{Math.round(props.distanceToParking.value)}m to goal</div>
-            flowRate: {flowRateOut} - {flowRateIn} ={" "}
-            {formatWei(flowRate.out - flowRate.in)}
+            <div>
+              balance:<br />
+              &nbsp;<CurrentBalance
+                flowRate={flowRate.out - flowRate.in}
+                initialBalance={initialBalance}
+              />
+            </div>
+            <div>
+              flowRate:<br />
+              &nbsp;{flowRateOut} - {flowRateIn} ={" "}
+              <span class="text-xl">
+                {formatWei(flowRate.out - flowRate.in)}
+              </span>
+            </div>
+            <div class="text-right">
+              ({Math.round(props.distanceToParking.value)}m to goal)
+            </div>
             <h3 class="font-bold text-center text-sm pt-2">Your wallet</h3>
           </div>
           <div
-            class={`text-center w-14 ${
+            class={`text-center w-16 transition-colors duration-500 ${
               flowRate.out ? "text-red-400" : "text-gray-400"
             } ${flexChildClass}`}
           >

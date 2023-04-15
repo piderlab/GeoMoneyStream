@@ -166,7 +166,7 @@ export default function Map(props: MapProps) {
       }
     });
   }, []);
-  return <div class="w-1/2 h-screen" ref={divRef}></div>;
+  return <div class="w-1/2 h-screen resize-x" ref={divRef}></div>;
 }
 
 function flowRateFromLatLng(latlng: L.LatLng) {
