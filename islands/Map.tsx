@@ -7,13 +7,14 @@ import { walletAddress } from "./signals.ts";
 const leafletUrl = "https://esm.sh/leaflet@1.9.3/";
 
 let L: typeof import("https://esm.sh/leaflet@1.9.3/");
+let blueIcon: ReturnType<typeof L.icon>;
 let carIcon: ReturnType<typeof L.icon>;
 if (IS_BROWSER) {
   L = await import("https://esm.sh/leaflet@1.9.3/");
   await import("../lib/MovingMarker.js");
 
   // default icon
-  const blueIcon = L.icon({
+  blueIcon = L.icon({
     iconUrl: `${leafletUrl}dist/images/marker-icon.png`,
     iconRetinaUrl: `${leafletUrl}dist/images/marker-icon-2x.png`,
     shadowUrl: `${leafletUrl}dist/images/marker-shadow.png`,
@@ -79,10 +80,10 @@ export default function Map(props: MapProps) {
     L.control.scale().addTo(map);
 
     // アイコン追加
-    L.marker(虎ノ門ヒルズ).addTo(map);
-    L.marker(渋谷).addTo(map);
-    L.marker(pointA).addTo(map); //hh
-    L.marker(pointB).addTo(map); //hh
+    L.marker(虎ノ門ヒルズ, { icon: blueIcon }).addTo(map);
+    L.marker(渋谷, { icon: blueIcon }).addTo(map);
+    L.marker(pointA, { icon: blueIcon }).addTo(map); //hh
+    L.marker(pointB, { icon: blueIcon }).addTo(map); //hh
 
     // 円
     L.circle(虎ノ門ヒルズ, {
