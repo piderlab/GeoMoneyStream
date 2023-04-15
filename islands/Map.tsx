@@ -1,9 +1,7 @@
 import { IS_BROWSER } from "$fresh/runtime.ts";
-import { type StateUpdater, useEffect, useRef } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
+import type { Signal } from "@preact/signals";
 
-import { walletAddress } from "./signals.ts";
-
-// import * as L from "https://esm.sh/leaflet@1.9.3/";
 const leafletUrl = "https://esm.sh/leaflet@1.9.3/";
 
 let L: typeof import("https://esm.sh/leaflet@1.9.3/");
@@ -64,8 +62,8 @@ const pointA: [number, number] = [35.68, 139.72]; //hh
 const pointB: [number, number] = [35.64, 139.74]; //hh
 
 interface MapProps {
-  setDistanceToParking: StateUpdater<number>;
-  // distanceToParking: Signal<number>;
+  distanceToParking: Signal<number>;
+  walletAddress: Signal<string | null>;
 }
 
 export default function Map(props: MapProps) {
@@ -124,7 +122,7 @@ export default function Map(props: MapProps) {
     渋谷Marker.on("mouseup", () => {
       渋谷Marker.moveTo(虎ノ門ヒルズ, 20000);
     });
-    walletAddress.subscribe((newValue) => {
+    props.walletAddress.subscribe((newValue) => {
       if (newValue) {
         渋谷Marker.start();
       }
@@ -134,16 +132,12 @@ export default function Map(props: MapProps) {
       const distance = (e as L.LeafletMouseEvent).latlng.distanceTo(
         虎ノ門ヒルズ,
       );
-      props.setDistanceToParking(distance);
+      // props.setDistanceToParking(distance);
+      props.distanceToParking.value = distance;
     });
-
-    // props.setDistanceToParking(
-    //   渋谷Marker.getLatLng().distanceTo(虎ノ門ヒルズ),
-    // );
   }, []);
   return (
     <>
-      {/* <button onClick={() => props.setDistanceToParking(100)}>aaa</button> */}
       <div class="w-1/2 h-screen" ref={divRef}></div>
     </>
   );

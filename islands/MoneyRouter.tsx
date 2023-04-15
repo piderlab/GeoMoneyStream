@@ -1,15 +1,16 @@
 import { useState } from "preact/hooks";
+import type { Signal } from "@preact/signals";
 
 import CurrentBalance from "./CurrentBalance.tsx";
-import { walletAddress } from "./signals.ts";
 
 interface MoneyRouterProps {
-  distanceToParking: number;
+  distanceToParking: Signal<number>;
+  walletAddress: Signal<string | null>;
 }
 
 export default function MoneyRouter(props: MoneyRouterProps) {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
-  const flow = calcFlowRate(props.distanceToParking);
+  const flow = calcFlowRate(props.distanceToParking.value);
   const childClass = "px-1 mx-4 my-8 bg-white rounded shadow";
   const flexChildClass = "p-1 rounded";
   return (
@@ -19,8 +20,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
         First you need to connect a wallet such as Metamask.
         <button
           class="m-4 p-1 rounded shadow text-white bg-[#16A34A]"
-          // onClick={() => setIsWalletConnected(true)}
-          onClick={() => walletAddress.value = "aaa"}
+          onClick={() => props.walletAddress.value = "aaa"}
         >
           Connect wallet
         </button>
@@ -47,7 +47,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
             class={`w-[14em] p-2 bg-gradient-to-rb from-green-600 to-indigo-800 text-sm text-white ${flexChildClass}`}
           >
             balance: <CurrentBalance flowRate={flow.out - flow.in} />
-            <div>{Math.round(props.distanceToParking)}m to goal</div>
+            <div>{Math.round(props.distanceToParking.value)}m to goal</div>
             flowRate: {flow.out} - {flow.in} = {flow.out - flow.in}
             <h3 class="font-bold text-center text-sm pt-2">Your wallet</h3>
           </div>
