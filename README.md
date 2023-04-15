@@ -1,6 +1,6 @@
 # DrivingCommons
 
-Streaming money for carsharing commons
+Driving a car with streaming money
 
 ### Usage
 
