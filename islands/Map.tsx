@@ -44,15 +44,17 @@ if (IS_BROWSER) {
 
 // マーカー設置地点一覧
 const points = {
-  地図中心: [35.664883, 139.725265],
+  地図中心: [35.326885631, 137.754463424],
   虎ノ門ヒルズ: [35.6671145, 139.7499026],
-  渋谷: [35.6579364, 139.7017251],
-  信濃町: [35.68, 139.72], //hh
-  泉岳寺: [35.64, 139.74], //hh
+  //渋谷: [35.6579364, 139.7017251],
+  京都駅: [34.98665676201879, 135.75902424726624],
+  //信濃町: [35.68, 139.72], //hh
+  //泉岳寺: [35.64, 139.74], //hh
 } satisfies Record<string, [number, number]>;
 
 // 車のスタート/ゴール地点
-const スタート地点 = points.渋谷;
+//const スタート地点 = points.渋谷;
+const スタート地点 = points.京都駅;
 const ゴール地点 = points.虎ノ門ヒルズ;
 
 // 支払いエリア設定
@@ -65,24 +67,60 @@ const areas: Area[] = [
     center: points.虎ノ門ヒルズ,
     flowRateList: [{
       // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
-      radius: 2000,
+      radius: 3000,
       flowRate: { in: 0.0001 * ETH_TO_WEI, out: 0 },
       color: "blue",
       fillColor: "#93C5FD",
-    }, {
+    //}, {
       // 半径1000m以内の時は、defaultFlowRateの値に加えて20トークンのincoming
-      radius: 1000,
-      flowRate: { in: 0.0002 * ETH_TO_WEI, out: 0 },
-      color: "green",
-      fillColor: "#A7F3D0",
-    }, {
+      //radius: 1000,
+      //flowRate: { in: 0.0002 * ETH_TO_WEI, out: 0 },
+      //color: "green",
+      //fillColor: "#A7F3D0",
+    //}, {
       // 半径500m以内の時は、defaultFlowRateの値に加えて30トークンのincoming
-      radius: 500,
-      flowRate: { in: 0.0003 * ETH_TO_WEI, out: 0 },
+      //radius: 500,
+      //flowRate: { in: 0.0003 * ETH_TO_WEI, out: 0 },
+      //color: "red",
+      //fillColor: "#FCA5A5",
+    }],
+  }, {
+    center: [35.171283868472166, 136.8815498545573], // 名古屋駅
+    flowRateList: [{
+      // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
+      radius: 50000,
+      flowRate: { in: 0 * ETH_TO_WEI, out: 0.0001 },
       color: "red",
       fillColor: "#FCA5A5",
-    }],
-  },
+    }]
+  }, {
+    center: [35.35976586171875, 138.73117473306897], // 富士山頂
+    flowRateList: [{
+      // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
+      radius: 40000,
+      flowRate: { in: 0 * ETH_TO_WEI, out: 0.0001 },
+      color: "red",
+      fillColor: "#FCA5A5",
+    }]
+  }, {
+    center: [35.97984688034072, 139.75244110060535], // 春日部駅
+    flowRateList: [{
+      // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
+      radius: 30000,
+      flowRate: { in: 0 * ETH_TO_WEI, out: 0.0001 },
+      color: "red",
+      fillColor: "#FCA5A5",
+    }]
+  }, {
+    center: [36.64308977712896, 138.1887938866109], // 長野駅
+    flowRateList: [{
+      // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
+      radius: 60000,
+      flowRate: { in: 0.0001 * ETH_TO_WEI, out: 0 },
+      color: "blue",
+      fillColor: "#93C5FD",
+    }]
+  }
 ];
 
 interface Area {
@@ -105,7 +143,7 @@ interface MapProps {
 export default function Map(props: MapProps) {
   const divRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const map = L.map(divRef.current!).setView(points.地図中心, 13);
+    const map = L.map(divRef.current!).setView(points.地図中心, 7);
 
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
@@ -160,13 +198,13 @@ export default function Map(props: MapProps) {
       }
       console.log({ newValue });
       if (newValue !== 0) {
-        carMarker.stop();
+        carMarker.pause();
       } else {
-        carMarker.moveTo(ゴール地点, 20000);
+        carMarker.resume();
       }
     });
   }, []);
-  return <div class="w-1/2 h-screen resize-x" ref={divRef}></div>;
+  return <div class="w-1/2 h-screen" ref={divRef}></div>;
 }
 
 function flowRateFromLatLng(latlng: L.LatLng) {
