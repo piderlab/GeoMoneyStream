@@ -36,7 +36,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
           </div>
           <div
             class={`text-center w-12 ${
-              flowRate.in ? "text-purple-500" : "text-gray-400"
+              flowRate.in ? "text-[#84CC16]" : "text-gray-400"
             } ${flexChildClass}`}
           >
             <div class="text-lg">in</div>
@@ -54,7 +54,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
           </div>
           <div
             class={`text-center w-12 ${
-              flowRate.out ? "text-blue-500" : "text-gray-400"
+              flowRate.out ? "text-red-400" : "text-gray-400"
             } ${flexChildClass}`}
           >
             <div class="text-lg">out</div>
