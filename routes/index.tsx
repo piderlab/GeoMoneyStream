@@ -14,7 +14,6 @@ export default function Home() {
         {/* <!-- Copyright 2018 Twitter, Inc and other contributors. Graphics licensed under CC-BY 4.0: https://creativecommons.org/licenses/by/4.0/ --> */}
         <link rel="icon" type="image/png" href="https://favi.deno.dev/🚗.png" />
         <link rel="apple-touch-icon" href="https://favi.deno.dev/🚗.png" />
-        <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
