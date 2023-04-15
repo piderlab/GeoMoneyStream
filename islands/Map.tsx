@@ -1,9 +1,10 @@
+import { IS_BROWSER } from "$fresh/runtime.ts";
 import { type StateUpdater, useEffect, useRef } from "preact/hooks";
+
+import { walletAddress } from "./signals.ts";
 
 // import * as L from "https://esm.sh/leaflet@1.9.3/";
 const leafletUrl = "https://esm.sh/leaflet@1.9.3/";
-
-import { IS_BROWSER } from "$fresh/runtime.ts";
 
 let L: typeof import("https://esm.sh/leaflet@1.9.3/");
 let carIcon: ReturnType<typeof L.icon>;
@@ -27,7 +28,7 @@ if (IS_BROWSER) {
     // iconRetinaUrl: `${leafletUrl}dist/images/marker-icon-2x.png`,
     shadowUrl: `${leafletUrl}dist/images/marker-shadow.png`,
     iconSize: [60, 60],
-    iconAnchor: [12, 41],
+    iconAnchor: [30, 30],
     popupAnchor: [1, -34],
     tooltipAnchor: [16, -28],
     shadowSize: [60, 50],
@@ -82,7 +83,7 @@ export default function Map(props: MapProps) {
     L.circle(虎ノ門ヒルズ, {
       radius: 2000,
       color: "blue",
-      fillColor: "#60A5FA",
+      fillColor: "#93C5FD",
       fillOpacity: 0.5,
       weight: 0,
     }).addTo(map);
@@ -101,8 +102,8 @@ export default function Map(props: MapProps) {
       weight: 0,
     }).addTo(map);
     L.polyline([虎ノ門ヒルズ, 渋谷], {
-      color: "#000000",
-      weight: 3,
+      color: "#374151",
+      weight: 2,
     }).addTo(map);
 
     // 車のアイコン
@@ -114,7 +115,14 @@ export default function Map(props: MapProps) {
     渋谷Marker.on("mousedown", () => {
       渋谷Marker.stop();
     });
-    渋谷Marker.start();
+    渋谷Marker.on("mouseup", () => {
+      渋谷Marker.moveTo(虎ノ門ヒルズ, 20000);
+    });
+    walletAddress.subscribe((newValue) => {
+      if (newValue) {
+        渋谷Marker.start();
+      }
+    });
 
     渋谷Marker.on("move", (e: unknown) => {
       const distance = (e as L.LeafletMouseEvent).latlng.distanceTo(
@@ -123,9 +131,9 @@ export default function Map(props: MapProps) {
       props.setDistanceToParking(distance);
     });
 
-    props.setDistanceToParking(
-      渋谷Marker.getLatLng().distanceTo(虎ノ門ヒルズ),
-    );
+    // props.setDistanceToParking(
+    //   渋谷Marker.getLatLng().distanceTo(虎ノ門ヒルズ),
+    // );
   }, []);
   return (
     <>

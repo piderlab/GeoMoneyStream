@@ -8,7 +8,7 @@ export default function Main() {
   // const distanceToParking = useSignal(0);
   const [distanceToParking, setDistanceToParking] = useState(0);
   return (
-    <div class="flex w-full">
+    <div class="flex w-full text-gray-800">
       <Map setDistanceToParking={setDistanceToParking} />
       <MoneyRouter distanceToParking={distanceToParking} />
     </div>
