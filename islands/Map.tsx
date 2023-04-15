@@ -68,7 +68,7 @@ const areas: Area[] = [
     flowRateList: [{
       // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
       radius: 3000,
-      flowRate: { in: 0.0001 * ETH_TO_WEI, out: 0 },
+      flowRate: { in: 0.0003 * ETH_TO_WEI, out: 0 },
       color: "blue",
       fillColor: "#93C5FD",
       //}, {
@@ -90,7 +90,7 @@ const areas: Area[] = [
     flowRateList: [{
       // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
       radius: 50000,
-      flowRate: { in: 0, out: 0.0001 * ETH_TO_WEI },
+      flowRate: { in: 0, out: 0.0002 * ETH_TO_WEI },
       color: "red",
       fillColor: "#FCA5A5",
     }],
@@ -110,7 +110,7 @@ const areas: Area[] = [
     flowRateList: [{
       // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
       radius: 30000,
-      flowRate: { in: 0, out: 0.0001 * ETH_TO_WEI },
+      flowRate: { in: 0, out: 0.0002 * ETH_TO_WEI },
       color: "red",
       fillColor: "#FCA5A5",
     }],

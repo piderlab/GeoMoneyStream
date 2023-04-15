@@ -83,7 +83,9 @@ export default function MoneyRouter(props: MoneyRouterProps) {
     <div class="w-[600px] flex-grow flex-shrink-0 bg-gray-100 overflow-y-scroll shadow-inner">
       <div class={childClass}>
         <h2 class="text-2xl p-1">1. Connect wallet</h2>
-        First you need to connect a wallet such as Metamask.<br />
+        Connect a wallet such as Metamask.
+        You need to get some DAIx on Mumbai from here:
+        https://docs.superfluid.finance/superfluid/developers/super-tokens/super-token-faucet <br />
         <button
           class="inline m-4 p-1 rounded shadow text-white bg-[#16A34A]"
           onClick={() => onWalletConnect({ ...props, initialBalance })}
@@ -93,7 +95,10 @@ export default function MoneyRouter(props: MoneyRouterProps) {
         <span class="border p-1 text-sm">{props.walletAddress.value}</span>
       </div>
       <div class={childClass}>
-        <h2 class="text-2xl p-1">2. Money streaming</h2>
+        <h2 class="text-2xl p-1">2. Driving a car with streaming money</h2>
+        You travel from Kyoto to Tokyo and pay 0.0004 yen per second.
+        You must make additional payments in the red areas and earn income in the blue areas.
+        You can move the car with the mouse.
         <div class="flex items-center justify-center p-1">
           <div
             class={`text-center text-sm bg-blue-100 ${flexChildClass}`}
