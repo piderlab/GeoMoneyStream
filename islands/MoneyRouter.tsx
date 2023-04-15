@@ -15,19 +15,18 @@ export default function MoneyRouter(props: MoneyRouterProps) {
   return (
     <div class="w-1/2 bg-gray-100 overflow-y-scroll shadow-inner">
       <div class={childClass}>
-        <h2 class="text-2xl py-3">1. Connect Wallet</h2>
-        First you need to connect a wallet such as Metamask.
+        <h2 class="text-2xl p-1">1. Connect wallet</h2>
         <button
           class="m-4 p-1 rounded shadow text-white bg-[#16A34A]"
           // onClick={() => setIsWalletConnected(true)}
           onClick={() => walletAddress.value = "aaa"}
         >
-          Connect Wallet
+          Connect wallet
         </button>
       </div>
       <div class={childClass}>
-        <h2 class="text-2xl px-1 py-3">2. Start Payment</h2>
-        <div class="flex items-center justify-center pb-4">
+        <h2 class="text-2xl p-1">2. Money streaming</h2>
+        <div class="flex items-center justify-center p-1">
           <div
             class={`text-center text-sm bg-blue-100 ${flexChildClass}`}
           >
@@ -49,7 +48,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
             balance: <CurrentBalance flowRate={flow.out - flow.in} />
             <div>{Math.round(props.distanceToParking)}m to goal</div>
             flowRate: {flow.out} - {flow.in} = {flow.out - flow.in}
-            <h3 class="font-bold text-center text-sm pt-2">Your Wallet</h3>
+            <h3 class="font-bold text-center text-sm pt-2">Your wallet</h3>
           </div>
           <div
             class={`text-center w-12 ${
