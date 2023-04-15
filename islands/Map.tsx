@@ -2,6 +2,8 @@ import { IS_BROWSER } from "$fresh/runtime.ts";
 import { useEffect, useRef } from "preact/hooks";
 import type { Signal } from "@preact/signals";
 
+const ETH_TO_WEI = 10 ** 18;
+
 const leafletUrl = "https://esm.sh/leaflet@1.9.3/";
 
 let L: typeof import("https://esm.sh/leaflet@1.9.3/");
@@ -55,7 +57,7 @@ const ゴール地点 = points.虎ノ門ヒルズ;
 
 // 支払いエリア設定
 /** デフォルト（ベース）の支払額 */
-const defaultFlowRate = { in: 0, out: 40 };
+const defaultFlowRate = { in: 0, out: 0.0004 * ETH_TO_WEI };
 
 const areas: Area[] = [
   {
@@ -64,19 +66,19 @@ const areas: Area[] = [
     flowRateList: [{
       // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
       radius: 2000,
-      flowRate: { in: 10, out: 0 },
+      flowRate: { in: 0.0001 * ETH_TO_WEI, out: 0 },
       color: "blue",
       fillColor: "#93C5FD",
     }, {
       // 半径1000m以内の時は、defaultFlowRateの値に加えて20トークンのincoming
       radius: 1000,
-      flowRate: { in: 20, out: 0 },
+      flowRate: { in: 0.0002 * ETH_TO_WEI, out: 0 },
       color: "green",
       fillColor: "#A7F3D0",
     }, {
       // 半径500m以内の時は、defaultFlowRateの値に加えて30トークンのincoming
       radius: 500,
-      flowRate: { in: 30, out: 0 },
+      flowRate: { in: 0.0003 * ETH_TO_WEI, out: 0 },
       color: "red",
       fillColor: "#FCA5A5",
     }],
@@ -97,6 +99,7 @@ interface MapProps {
   flowRate: Signal<{ in: number; out: number }>;
   distanceToParking: Signal<number>;
   walletAddress: Signal<string | null>;
+  transactionWaiter: Signal<number>;
 }
 
 export default function Map(props: MapProps) {
@@ -149,6 +152,17 @@ export default function Map(props: MapProps) {
     props.walletAddress.subscribe((newValue) => {
       if (newValue) {
         carMarker.start();
+      }
+    });
+    props.transactionWaiter.subscribe((newValue) => {
+      if (!props.walletAddress.value) {
+        return;
+      }
+      console.log({ newValue });
+      if (newValue !== 0) {
+        carMarker.pause();
+      } else {
+        carMarker.resume();
       }
     });
   }, []);
