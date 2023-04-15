@@ -133,8 +133,12 @@ export default function Map(props: MapProps) {
       .on("mouseup", () => carMarker.moveTo(ゴール地点, 20000))
       .on("move", (e: unknown) => {
         const { latlng } = e as L.LeafletMouseEvent;
-        props.flowRate.value = flowRateFromLatLng(latlng);
-        props.distanceToParking.value = latlng.distanceTo(ゴール地点);
+        const distanceToParking = latlng.distanceTo(ゴール地点);
+        props.distanceToParking.value = distanceToParking;
+        // ゴールまで1mを切っている場合は支払い終了（0.xxxMの時の小数点以下がわかりにくいため）
+        props.flowRate.value = 1 < distanceToParking
+          ? flowRateFromLatLng(latlng)
+          : { in: 0, out: 0 };
       });
 
     props.walletAddress.subscribe((newValue) => {
