@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 
 interface CurrentBalanceProps {
   /**wei/秒*/
@@ -34,13 +34,7 @@ export default function CurrentBalance(props: CurrentBalanceProps) {
       shouldContinue = false;
     };
   }, [props.flowRate]);
-  return (
-    <>
-      balance: <span ref={spanRef}></span>
-      <br />
-      flowRate: {props.flowRate}
-    </>
-  );
+  return <span class="text-xl" ref={spanRef}></span>;
 }
 
 const requestAnimationFramePromise = () =>

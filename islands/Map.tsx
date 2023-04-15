@@ -1,18 +1,18 @@
-import { type StateUpdater, useEffect, useRef } from "preact/hooks";
+import { IS_BROWSER } from "$fresh/runtime.ts";
+import { useEffect, useRef } from "preact/hooks";
+import type { Signal } from "@preact/signals";
 
-// import * as L from "https://esm.sh/leaflet@1.9.3/";
 const leafletUrl = "https://esm.sh/leaflet@1.9.3/";
 
-import { IS_BROWSER } from "$fresh/runtime.ts";
-
 let L: typeof import("https://esm.sh/leaflet@1.9.3/");
+let blueIcon: ReturnType<typeof L.icon>;
 let carIcon: ReturnType<typeof L.icon>;
 if (IS_BROWSER) {
   L = await import("https://esm.sh/leaflet@1.9.3/");
   await import("../lib/MovingMarker.js");
 
   // default icon
-  const blueIcon = L.icon({
+  blueIcon = L.icon({
     iconUrl: `${leafletUrl}dist/images/marker-icon.png`,
     iconRetinaUrl: `${leafletUrl}dist/images/marker-icon-2x.png`,
     shadowUrl: `${leafletUrl}dist/images/marker-shadow.png`,
@@ -27,7 +27,7 @@ if (IS_BROWSER) {
     // iconRetinaUrl: `${leafletUrl}dist/images/marker-icon-2x.png`,
     shadowUrl: `${leafletUrl}dist/images/marker-shadow.png`,
     iconSize: [60, 60],
-    iconAnchor: [12, 41],
+    iconAnchor: [30, 30],
     popupAnchor: [1, -34],
     tooltipAnchor: [16, -28],
     shadowSize: [60, 50],
@@ -62,8 +62,8 @@ const pointA: [number, number] = [35.68, 139.72]; //hh
 const pointB: [number, number] = [35.64, 139.74]; //hh
 
 interface MapProps {
-  setDistanceToParking: StateUpdater<number>;
-  // distanceToParking: Signal<number>;
+  distanceToParking: Signal<number>;
+  walletAddress: Signal<string | null>;
 }
 
 export default function Map(props: MapProps) {
@@ -78,16 +78,16 @@ export default function Map(props: MapProps) {
     L.control.scale().addTo(map);
 
     // アイコン追加
-    L.marker(虎ノ門ヒルズ).addTo(map);
-    L.marker(渋谷).addTo(map);
-    L.marker(pointA).addTo(map); //hh
-    L.marker(pointB).addTo(map); //hh
+    L.marker(虎ノ門ヒルズ, { icon: blueIcon }).addTo(map);
+    L.marker(渋谷, { icon: blueIcon }).addTo(map);
+    L.marker(pointA, { icon: blueIcon }).addTo(map); //hh
+    L.marker(pointB, { icon: blueIcon }).addTo(map); //hh
 
     // 円
     L.circle(虎ノ門ヒルズ, {
       radius: 2000,
       color: "blue",
-      fillColor: "#60A5FA",
+      fillColor: "#93C5FD",
       fillOpacity: 0.5,
       weight: 0,
     }).addTo(map);
@@ -119,22 +119,25 @@ export default function Map(props: MapProps) {
     渋谷Marker.on("mousedown", () => {
       渋谷Marker.stop();
     });
-    渋谷Marker.start();
+    渋谷Marker.on("mouseup", () => {
+      渋谷Marker.moveTo(虎ノ門ヒルズ, 20000);
+    });
+    props.walletAddress.subscribe((newValue) => {
+      if (newValue) {
+        渋谷Marker.start();
+      }
+    });
 
     渋谷Marker.on("move", (e: unknown) => {
       const distance = (e as L.LeafletMouseEvent).latlng.distanceTo(
         虎ノ門ヒルズ,
       );
-      props.setDistanceToParking(distance);
+      // props.setDistanceToParking(distance);
+      props.distanceToParking.value = distance;
     });
-
-    props.setDistanceToParking(
-      渋谷Marker.getLatLng().distanceTo(虎ノ門ヒルズ),
-    );
   }, []);
   return (
     <>
-      {/* <button onClick={() => props.setDistanceToParking(100)}>aaa</button> */}
       <div class="w-1/2 h-screen" ref={divRef}></div>
     </>
   );
