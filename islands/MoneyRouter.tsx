@@ -4,12 +4,13 @@ import type { Signal } from "@preact/signals";
 import CurrentBalance from "./CurrentBalance.tsx";
 
 interface MoneyRouterProps {
+  flowRate: Signal<{ in: number; out: number }>;
   distanceToParking: Signal<number>;
   walletAddress: Signal<string | null>;
 }
 
 export default function MoneyRouter(props: MoneyRouterProps) {
-  const flow = calcFlowRate(props.distanceToParking.value);
+  const flowRate = props.flowRate.value;
   const childClass = "px-1 mx-4 my-8 bg-white rounded shadow";
   const flexChildClass = "p-1 rounded";
   return (
@@ -35,29 +36,30 @@ export default function MoneyRouter(props: MoneyRouterProps) {
           </div>
           <div
             class={`text-center w-12 ${
-              flow.in ? "text-purple-500" : "text-gray-400"
+              flowRate.in ? "text-purple-500" : "text-gray-400"
             } ${flexChildClass}`}
           >
             <div class="text-lg">in</div>
             <div class="text-5xl leading-5 -mx-8 text-center">→</div>
-            <div>{flow.in}</div>
+            <div>{flowRate.in}</div>
           </div>
           <div
             class={`w-[14em] p-2 bg-gradient-to-rb from-green-600 to-indigo-800 text-sm text-white ${flexChildClass}`}
           >
-            balance: <CurrentBalance flowRate={flow.out - flow.in} />
+            balance: <CurrentBalance flowRate={flowRate.out - flowRate.in} />
             <div>{Math.round(props.distanceToParking.value)}m to goal</div>
-            flowRate: {flow.out} - {flow.in} = {flow.out - flow.in}
+            flowRate: {flowRate.out} - {flowRate.in} ={" "}
+            {flowRate.out - flowRate.in}
             <h3 class="font-bold text-center text-sm pt-2">Your wallet</h3>
           </div>
           <div
             class={`text-center w-12 ${
-              flow.out ? "text-blue-500" : "text-gray-400"
+              flowRate.out ? "text-blue-500" : "text-gray-400"
             } ${flexChildClass}`}
           >
             <div class="text-lg">out</div>
             <div class="text-5xl leading-5 -mx-8 text-center">→</div>
-            <div>{flow.out}</div>
+            <div>{flowRate.out}</div>
           </div>
           <div
             class={`text-center text-sm bg-blue-100 ${flexChildClass}`}
@@ -69,20 +71,4 @@ export default function MoneyRouter(props: MoneyRouterProps) {
       </div>
     </div>
   );
-}
-
-function calcFlowRate(distance: number) {
-  if (distance <= 0) {
-    return { in: 0, out: 0 };
-  }
-  if (2000 < distance) {
-    return { in: 0, out: 40 };
-  }
-  if (1000 <= distance) {
-    return { in: 10, out: 40 };
-  }
-  if (500 <= distance) {
-    return { in: 20, out: 40 };
-  }
-  return { in: 30, out: 40 };
 }
