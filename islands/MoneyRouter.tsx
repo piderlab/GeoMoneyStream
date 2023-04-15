@@ -9,7 +9,6 @@ interface MoneyRouterProps {
 }
 
 export default function MoneyRouter(props: MoneyRouterProps) {
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
   const flow = calcFlowRate(props.distanceToParking.value);
   const childClass = "px-1 mx-4 my-8 bg-white rounded shadow";
   const flexChildClass = "p-1 rounded";
@@ -17,7 +16,7 @@ export default function MoneyRouter(props: MoneyRouterProps) {
     <div class="w-1/2 bg-gray-100 overflow-y-scroll shadow-inner">
       <div class={childClass}>
         <h2 class="text-2xl p-1">1. Connect wallet</h2>
-        First you need to connect a wallet such as Metamask.
+        First you need to connect a wallet such as Metamask.<br />
         <button
           class="m-4 p-1 rounded shadow text-white bg-[#16A34A]"
           onClick={() => props.walletAddress.value = "aaa"}
