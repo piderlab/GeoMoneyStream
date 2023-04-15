@@ -1,6 +1,4 @@
-import { IS_BROWSER } from "$fresh/runtime.ts";
-import { useEffect, useRef } from "preact/hooks";
-import { computed, effect, type Signal, signal } from "@preact/signals";
+import { type Signal, signal } from "@preact/signals";
 
 // @deno-types="https://esm.sh/v114/@superfluid-finance/sdk-core@0.6.3/dist/module/index.d.ts"
 import { Framework, type SuperToken } from "../build/superfluid.js";
@@ -113,8 +111,25 @@ export default function MoneyRouter(props: MoneyRouterProps) {
             <div>{flowRateIn}</div>
           </div>
           <div
-            class={`w-[18em] p-2 flex-shrink-0 bg-gradient-to-rb from-green-600 to-indigo-800 text-sm text-white ${flexChildClass}`}
+            class={`w-[18em] p-2 flex-shrink-0 bg-gradient-to-rb from-green-600 to-indigo-800 text-sm text-white ${flexChildClass} ${
+              flowRate.out - flowRate.in === 0 ? "" : "wallet"
+            }`}
           >
+            <style>
+              {`
+                  .wallet {
+                    animation: pulse1 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                  }
+                  @keyframes pulse1 {
+                    0%, 100% {
+                      opacity: 1;
+                    }
+                    50% {
+                      opacity: .8;
+                    }
+                  }
+                  `}
+            </style>
             <div>
               balance:<br />
               &nbsp;<CurrentBalance

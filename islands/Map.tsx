@@ -42,9 +42,9 @@ if (IS_BROWSER) {
   document.head.append(leafletStyleElement);
 }
 
+const 地図中心: [number, number] = [35.326885631, 137.754463424];
 // マーカー設置地点一覧
 const points = {
-  地図中心: [35.326885631, 137.754463424],
   虎ノ門ヒルズ: [35.6671145, 139.7499026],
   //渋谷: [35.6579364, 139.7017251],
   京都駅: [34.98665676201879, 135.75902424726624],
@@ -71,20 +71,21 @@ const areas: Area[] = [
       flowRate: { in: 0.0001 * ETH_TO_WEI, out: 0 },
       color: "blue",
       fillColor: "#93C5FD",
-    //}, {
+      //}, {
       // 半径1000m以内の時は、defaultFlowRateの値に加えて20トークンのincoming
       //radius: 1000,
       //flowRate: { in: 0.0002 * ETH_TO_WEI, out: 0 },
       //color: "green",
       //fillColor: "#A7F3D0",
-    //}, {
+      //}, {
       // 半径500m以内の時は、defaultFlowRateの値に加えて30トークンのincoming
       //radius: 500,
       //flowRate: { in: 0.0003 * ETH_TO_WEI, out: 0 },
       //color: "red",
       //fillColor: "#FCA5A5",
     }],
-  }, {
+  },
+  {
     center: [35.171283868472166, 136.8815498545573], // 名古屋駅
     flowRateList: [{
       // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
@@ -92,8 +93,9 @@ const areas: Area[] = [
       flowRate: { in: 0 * ETH_TO_WEI, out: 0.0001 },
       color: "red",
       fillColor: "#FCA5A5",
-    }]
-  }, {
+    }],
+  },
+  {
     center: [35.35976586171875, 138.73117473306897], // 富士山頂
     flowRateList: [{
       // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
@@ -101,8 +103,9 @@ const areas: Area[] = [
       flowRate: { in: 0 * ETH_TO_WEI, out: 0.0001 },
       color: "red",
       fillColor: "#FCA5A5",
-    }]
-  }, {
+    }],
+  },
+  {
     center: [35.97984688034072, 139.75244110060535], // 春日部駅
     flowRateList: [{
       // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
@@ -110,8 +113,9 @@ const areas: Area[] = [
       flowRate: { in: 0 * ETH_TO_WEI, out: 0.0001 },
       color: "red",
       fillColor: "#FCA5A5",
-    }]
-  }, {
+    }],
+  },
+  {
     center: [36.64308977712896, 138.1887938866109], // 長野駅
     flowRateList: [{
       // 半径2000m以内の時は、defaultFlowRateの値に加えて10トークンのincoming
@@ -119,8 +123,8 @@ const areas: Area[] = [
       flowRate: { in: 0.0001 * ETH_TO_WEI, out: 0 },
       color: "blue",
       fillColor: "#93C5FD",
-    }]
-  }
+    }],
+  },
 ];
 
 interface Area {
@@ -143,7 +147,7 @@ interface MapProps {
 export default function Map(props: MapProps) {
   const divRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const map = L.map(divRef.current!).setView(points.地図中心, 7);
+    const map = L.map(divRef.current!).setView(地図中心, 7);
 
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
