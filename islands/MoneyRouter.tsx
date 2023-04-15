@@ -140,9 +140,9 @@ export default function MoneyRouter(props: MoneyRouterProps) {
             </div>
             <div>
               flowRate:<br />
-              &nbsp;{flowRateOut} - {flowRateIn} ={" "}
+              &nbsp;{flowRateIn} - {flowRateOut} ={" "}
               <span class="text-xl">
-                {formatWei(flowRate.out - flowRate.in)}
+                {formatWei(flowRate.in - flowRate.out) /* 表示のため正負逆 */}
               </span>
             </div>
             <div class="text-right">
